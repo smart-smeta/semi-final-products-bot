@@ -7,13 +7,16 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.filters import CommandStart
 from aiogram.client.default import DefaultBotProperties
 from dotenv import load_dotenv
+from bot.keyboards.main import main_menu
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 async def start_handler(message: Message):
-    await message.answer("👋 Привет! Добро пожаловать в бот доставки еды.\nНажми /menu чтобы начать.")
-
+    await message.answer(
+        "👋 Привет! Добро пожаловать в бот доставки еды.\nВыберите действие:",
+        reply_markup=main_menu
+    )
 async def main():
     bot = Bot(
         token=BOT_TOKEN,

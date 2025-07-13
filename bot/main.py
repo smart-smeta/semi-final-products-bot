@@ -1,6 +1,7 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from aiogram.types import Message
+from aiogram.filters import CommandStart
 from aiogram.fsm.storage.memory import MemoryStorage
 import asyncio
 import os
@@ -11,12 +12,14 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 async def start_handler(message: Message):
-    await message.answer("👋 Привет! Добро пожаловать в наш бот доставки еды.\nНажми /menu чтобы начать заказ.")
+    await message.answer("👋 Привет! Добро пожаловать в бот доставки еды.\nНажми /menu чтобы начать.")
 
 async def main():
-    bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.HTML)
+    bot = Bot(token=BOT_TOKEN, default=types.DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher(storage=MemoryStorage())
-    dp.message.register(start_handler, commands={"start"})
+
+    # Регистрируем хендлер с фильтром
+    dp.message.register(start_handler, CommandStart())
 
     await dp.start_polling(bot)
 

@@ -8,15 +8,22 @@ from aiogram.filters import CommandStart
 from aiogram.client.default import DefaultBotProperties
 from dotenv import load_dotenv
 from bot.keyboards.main import main_menu
+from database.models import init_db, add_user
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 async def start_handler(message: Message):
+    user = message.from_user
+    add_user(user.id, user.full_name, user.username or "")
     await message.answer(
         "👋 Привет! Добро пожаловать в бот доставки еды.\nВыберите действие:",
         reply_markup=main_menu
     )
+
+async def main():
+    init_db()
+
 async def main():
     bot = Bot(
         token=BOT_TOKEN,
